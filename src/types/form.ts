@@ -7,7 +7,7 @@ enum CandidateLevel {
   principal = "Principal",
 }
 
-export interface IFormInput {
+export interface FormInput {
   name: string;
   email: string;
   description: string;
@@ -15,8 +15,8 @@ export interface IFormInput {
   candidateLevel: CandidateLevel;
 }
 
-export interface IFormFieldProps {
-  name: keyof IFormInput; // This ensures name matches your form input types
+export interface FormFieldProps {
+  name: keyof FormInput; // This ensures name matches your form input types
   label: string;
   type: "input" | "textarea" | "select";
   validation?: {
@@ -34,15 +34,7 @@ export interface IFormFieldProps {
       message: string;
     };
   };
-  register: UseFormRegister<IFormInput>; // From react-hook-form
-  errors: FieldErrors<IFormInput>; // From react-hook-form
-  options?: string[]; // For select fields
-}
-
-export interface IAssignmentRequest {
-  name: string;
-  email: string;
-  assignment_description: string;
-  github_repo_url: string;
-  candidate_level: string;
+  register: UseFormRegister<FormInput>;
+  errors: FieldErrors<FormInput>;
+  options?: string[];
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import formFields from "@/constants/form";
-import { IAssignmentRequest, IFormInput } from "@/types/form";
+import { FormInput } from "@/types/form";
 import { useRouter } from "next/navigation";
 
 import FormField from "./FormField";
@@ -14,29 +14,22 @@ const Form = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInput>();
+  } = useForm<FormInput>();
   const router = useRouter();
   const [levels, setLevels] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    console.log("Endpoints:", {
-      levels: process.env.NEXT_PUBLIC_CANDIDATE_LEVELS_ENDPOINT,
-      assignments: process.env.NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT,
-    });
-  }, []);
-
   // Handle form submission
-  const onSubmit: SubmitHandler<IFormInput> = async () => {
+  const onSubmit: SubmitHandler<FormInput> = async (data) => {
     try {
-      const transformedData = (data: IFormInput): IAssignmentRequest => ({
+      const transformedData = {
         name: data.name,
         email: data.email,
         assignment_description: data.description,
         github_repo_url: data.url,
         candidate_level: data.candidateLevel,
-      });
+      };
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT}`,
