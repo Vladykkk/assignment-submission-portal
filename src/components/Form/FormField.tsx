@@ -1,4 +1,4 @@
-import { IFormFieldProps } from "@/types/form";
+import { FormFieldProps } from "@/types/form";
 
 const FormField = ({
   name,
@@ -8,7 +8,7 @@ const FormField = ({
   register,
   errors,
   options,
-}: IFormFieldProps) => {
+}: FormFieldProps) => {
   const inputClassName = `rounded-lg border px-4 py-2 focus:outline-none ${
     errors[name] ? "border-red-500" : "border-gray-300 focus:border-blue-500"
   }`;
