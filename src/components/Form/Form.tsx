@@ -20,6 +20,13 @@ const Form = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    console.log("Endpoints:", {
+      levels: process.env.NEXT_PUBLIC_CANDIDATE_LEVELS_ENDPOINT,
+      assignments: process.env.NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT,
+    });
+  }, []);
+
   // Handle form submission
   const onSubmit: SubmitHandler<IFormInput> = async () => {
     try {
