@@ -1,5 +1,3 @@
-## Getting Started
-
 # Installing dependencies
 
 ```bash
@@ -16,4 +14,18 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
+
+# Run Tests
+
+Run unit test
+
+```bash
+yarn test
+```
+
+Run coverage
+
+```bash
+yarn coverage
 ```
