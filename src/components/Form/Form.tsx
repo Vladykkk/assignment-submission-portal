@@ -5,8 +5,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import formFields from "@/constants/form";
 import { FormInput } from "@/types/form";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
+import Button from "../shared/Button";
 import FormField from "./FormField";
 
 const Form = () => {
@@ -23,6 +25,8 @@ const Form = () => {
   // Handle form submission
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
     try {
+      setIsLoading(true);
+
       const transformedData = {
         name: data.name,
         email: data.email,
@@ -31,27 +35,29 @@ const Form = () => {
         candidate_level: data.candidateLevel,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(transformedData),
-        },
+      await axios.post(
+        process.env.NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT || "",
+        transformedData,
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to submit form");
-      }
+      const searchParams = new URLSearchParams({
+        name: data.name,
+        email: data.email,
+        description: data.description,
+        github_repo_url: data.url,
+        candidate_level: data.candidateLevel,
+      });
 
-      const result = await response.json();
-      console.log("Success:", result);
-
-      router.push("/thank-you");
+      router.push(`/thank-you?${searchParams.toString()}`);
     } catch (error) {
+      if (error instanceof AxiosError) {
+        setError(error.response?.data?.message || "Failed to submit form");
+      } else {
+        setError("An unexpected error occurred");
+      }
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,20 +65,23 @@ const Form = () => {
   useEffect(() => {
     const fetchLevels = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_CANDIDATE_LEVELS_ENDPOINT}`,
-        );
+        const endpoint = process.env.NEXT_PUBLIC_CANDIDATE_LEVELS_ENDPOINT;
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (!endpoint) {
+          throw new Error("Candidate levels endpoint is not defined");
         }
 
-        const data = await response.json();
-        setLevels(data.levels);
-        setError(null);
+        const response = await axios.get(endpoint);
+        if (response.data?.levels) {
+          setLevels(response.data.levels);
+          setError(null);
+        }
       } catch (error) {
-        setError("Failed to load candidate levels. Please try again later.");
-        console.error("Error:", error);
+        setError(
+          error instanceof AxiosError
+            ? error.response?.data?.message || "Failed to load candidate levels"
+            : "An unexpected error occurred",
+        );
       } finally {
         setIsLoading(false);
       }
@@ -83,7 +92,7 @@ const Form = () => {
 
   return (
     <form
-      className="flex w-full max-w-[300px] flex-col gap-4 rounded-lg bg-white p-6 shadow-md"
+      className="flex w-full max-w-[500px] flex-col gap-4 rounded-lg bg-white p-6 shadow-md"
       onSubmit={handleSubmit(onSubmit)}
     >
       {formFields.map((field) => (
@@ -104,18 +113,9 @@ const Form = () => {
         errors={errors}
         options={levels}
       />
+      <p className="text-sm text-red-500">{error}</p>
 
-      <button
-        type="submit"
-        disabled={isLoading || !!error}
-        className={`rounded-lg px-4 py-2 text-white transition-colors focus:outline-none ${
-          isLoading || error
-            ? "cursor-not-allowed bg-gray-400"
-            : "bg-blue-500 hover:bg-blue-600"
-        }`}
-      >
-        {isLoading ? "Loading..." : "Submit"}
-      </button>
+      <Button type="submit" disabled={isLoading || !!error} text="Submit" />
     </form>
   );
 };
