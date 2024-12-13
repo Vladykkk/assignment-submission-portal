@@ -37,4 +37,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Run Tests
+        env:
+        NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT: ${{ secrets.NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT }}
+        NEXT_PUBLIC_CANDIDATE_LEVELS_ENDPOINT: ${{ secrets.NEXT_PUBLIC_CANDIDATE_LEVELS_ENDPOINT }}
         run: yarn test
