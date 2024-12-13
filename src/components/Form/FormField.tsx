@@ -3,6 +3,7 @@ import { FormFieldProps } from "@/types/form";
 const FormField = ({
   name,
   label,
+  placeholder,
   type,
   validation,
   register,
@@ -15,11 +16,20 @@ const FormField = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <label>{label}</label>
+      <label htmlFor={name}>{label}</label>
       {type === "textarea" ? (
-        <textarea className={inputClassName} {...register(name, validation)} />
+        <textarea
+          id={name}
+          placeholder={placeholder}
+          className={inputClassName}
+          {...register(name, validation)}
+        />
       ) : type === "select" ? (
-        <select className={inputClassName} {...register(name, validation)}>
+        <select
+          id={name}
+          className={inputClassName}
+          {...register(name, validation)}
+        >
           <option value="">Select a level</option>
           {options?.map((option) => (
             <option key={option} value={option}>
@@ -28,7 +38,12 @@ const FormField = ({
           ))}
         </select>
       ) : (
-        <input className={inputClassName} {...register(name, validation)} />
+        <input
+          id={name}
+          placeholder={placeholder}
+          className={inputClassName}
+          {...register(name, validation)}
+        />
       )}
       {errors[name] && (
         <p className="text-sm text-red-500">{errors[name].message}</p>

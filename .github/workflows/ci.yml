@@ -24,3 +24,20 @@ jobs:
 
       - name: Run ESLint
         run: yarn lint
+
+  # test:
+  #   needs: lint
+  #   name: Test Code
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Install dependencies
+  #       run: yarn install --immutable
+
+  #     - name: Run Tests
+  #       env:
+  #         NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT: ${{ secrets.NEXT_PUBLIC_ASSIGNMENTS_ENDPOINT }}
+  #         NEXT_PUBLIC_CANDIDATE_LEVELS_ENDPOINT: ${{ secrets.NEXT_PUBLIC_CANDIDATE_LEVELS_ENDPOINT }}
+  #       run: yarn test

@@ -2,6 +2,7 @@ const formFields = [
   {
     name: "name",
     label: "Name",
+    placeholder: "Your name",
     type: "input",
     validation: {
       required: "Type your name",
@@ -11,6 +12,7 @@ const formFields = [
   {
     name: "email",
     label: "Email",
+    placeholder: "john.doe@example.com",
     type: "input",
     validation: {
       required: "Provide your email",
@@ -23,6 +25,7 @@ const formFields = [
   {
     name: "description",
     label: "Assignment Description",
+    placeholder: "Write a description of project",
     type: "textarea",
     validation: {
       required: "Provide the description",
@@ -35,6 +38,7 @@ const formFields = [
   {
     name: "url",
     label: "GitHub Repository URL",
+    placeholder: "https://github.com/your-repo/",
     type: "input",
     validation: {
       required: "Provide the GitHub Repository URL",
